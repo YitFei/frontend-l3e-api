@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "L3FullBackend",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "C:\\jing hui\\L3-Education-App\\amplify\\backend\\api\\L3FullBackend\\schema.graphql",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authL3FullBackend"
+    },
+    "additionalAuthTypes": [],
+    "conflictResolution": {
+      "defaultResolutionStrategy": {
+        "type": "AUTOMERGE"
+      }
+    }
+  }
+}

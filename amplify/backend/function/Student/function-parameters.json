@@ -1,0 +1,55 @@
+{
+  "permissions": {
+    "auth": {
+      "L3FullBackend": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "api": {
+      "L3FullBackend": [
+        "Query",
+        "Mutation",
+        "Subscription"
+      ]
+    },
+    "storage": {
+      "Teacher:@model(appsync)": [
+        "read"
+      ],
+      "Excercise:@model(appsync)": [
+        "read"
+      ],
+      "Note:@model(appsync)": [
+        "read"
+      ],
+      "OnlineClassroom:@model(appsync)": [
+        "read"
+      ],
+      "CourseSubcription:@model(appsync)": [
+        "create",
+        "read",
+        "update"
+      ],
+      "User:@model(appsync)": [
+        "create",
+        "read",
+        "update"
+      ],
+      "PaymentRecord:@model(appsync)": [
+        "create",
+        "read",
+        "update"
+      ],
+      "Course:@model(appsync)": [
+        "read"
+      ],
+      "Timetable:@model(appsync)": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

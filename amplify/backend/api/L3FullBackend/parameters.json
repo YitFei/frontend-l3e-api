@@ -1,0 +1,12 @@
+{
+  "AppSyncApiName": "L3FullBackend",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authL3FullBackend",
+      "Outputs.UserPoolId"
+    ]
+  },
+  "AuthModeLastUpdated": "2022-01-26T14:53:45.868Z"
+}

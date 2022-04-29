@@ -1,0 +1,13 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+#logo {
+  max-height: 30px;
+  max-width: auto;
+  height: 100%;
+  width: auto;
+}
+:root {
+  font-size: calc(1vw + 1vh + 0.5vmin);
+}

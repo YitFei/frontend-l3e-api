@@ -1,0 +1,27 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-l3fullbackend-staging-11922-authRole",
+      "UnauthRoleArn": "arn:aws:iam::880360291562:role/amplify-l3fullbackend-staging-11922-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::880360291562:role/amplify-l3fullbackend-staging-11922-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-l3fullbackend-staging-11922-deployment",
+      "UnauthRoleName": "amplify-l3fullbackend-staging-11922-unauthRole",
+      "StackName": "amplify-l3fullbackend-staging-11922",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:880360291562:stack/amplify-l3fullbackend-staging-11922/d8e384f0-6f57-11ec-be3d-02a58faeed02",
+      "AmplifyAppId": "d3vag8114ok3eu",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-l3fullbackend-staging-11922-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "L3FullBackend": {}
+      },
+      "function": {
+        "Student": {
+          "deploymentBucketName": "amplify-l3fullbackend-staging-11922-deployment",
+          "s3Key": "amplify-builds/Student-4e324164424641424d6f-build.zip"
+        }
+      }
+    }
+  }
+}

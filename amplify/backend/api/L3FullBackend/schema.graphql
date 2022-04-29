@@ -1,0 +1,81 @@
+type Teacher @model @auth(rules: [{allow: groups, groups: ["super_admin"], operations: [create, update, delete, read]}, {allow: groups, groups: ["student"], operations: [read]}]) {
+  id: ID!
+  name: String!
+  email: String!
+  description: String
+  age: Int
+  hasTeach: [Course] @hasMany(indexName: "byTeacher", fields: ["id"])
+}
+
+type Excercise @model @auth(rules: [{allow: groups, groups: ["student"], operations: [read]}, {allow: groups, groups: ["teacher"], operations: [create, update, read]}, {allow: groups, groups: ["super_admin"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  name: String!
+  dateline: AWSDateTime
+  validUntil: String
+  url: String
+  description: String
+  courseID: ID @index(name: "byCourse")
+}
+
+type Note @model @auth(rules: [{allow: groups, groups: ["student"], operations: [read]}, {allow: groups, groups: ["teacher"], operations: [create, update, read]}, {allow: groups, groups: ["super_admin"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  name: String
+  url: String
+  validUntil: AWSDateTime
+  courseID: ID @index(name: "byCourse")
+}
+
+type OnlineClassroom @model @auth(rules: [{allow: groups, groups: ["student"], operations: [read]}, {allow: groups, groups: ["teacher"], operations: [read, create, update]}, {allow: groups, groups: ["super_admin"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  zoomUrl: AWSURL!
+}
+
+type CourseSubcription @model @auth(rules: [{allow: owner, ownerField: "userID" ,operations: [create, read, update]}]) {
+  id: ID!
+  userID: ID @index(name: "byUser")
+  course: Course @hasOne
+}
+
+type User @model @auth(rules: [{allow: private, operations: [create]}, {allow: owner, ownerField: "owner", operations: [read, update, delete]}, {allow: groups, groups: ["super_admin"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  isActive: Boolean!
+  hasSubscribe: [CourseSubcription] @hasMany(indexName: "byUser", fields: ["id"])
+  hasMakePayment: [CourseSubcription] @hasMany(indexName: "byUser", fields: ["id"])
+  email: String
+  name: String
+  owner: String
+}
+
+type PaymentRecord @model @auth(rules: [{allow: owner, operations: [create, read]}, {allow: groups, groups: ["super_admin"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  amount: Float!
+  reference: String!
+  time: AWSDateTime!
+  userID: ID @index(name: "byUser")
+  voided: Boolean!
+}
+
+type Course @model @auth(rules: [{allow: groups, groups: ["student"], operations: [read]}, {allow: groups, groups: ["teacher"], operations: [read, update]}, {allow: groups, groups: ["super_admin"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  description: String
+  startDate: AWSDate
+  endDate: AWSDate!
+  hasOnlineClassroom: OnlineClassroom @hasOne
+  courseCost: Float!
+  active: Boolean!
+  hasNotes: [Note] @hasMany(indexName: "byCourse", fields: ["id"])
+  teacherID: ID @index(name: "byTeacher")
+  hasExcercise: [Note] @hasMany(indexName: "byCourse", fields: ["id"])
+  hasTimetable: [Timetable] @hasMany(indexName: "byCourse", fields: ["id"])
+}
+
+type Timetable @model @auth(rules: [{allow: groups, groups: ["student"], operations: [read]}, {allow: groups, groups: ["teacher"], operations: [read, create, update]}, {allow: groups, groups: ["super_admin"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  courseDate: AWSDate
+  courseStartTime: AWSTime
+  courseEndTime: AWSDateTime
+  isCancel: Boolean
+  isFinish: Boolean
+  courseID: ID @index(name: "byCourse")
+}
+ 
