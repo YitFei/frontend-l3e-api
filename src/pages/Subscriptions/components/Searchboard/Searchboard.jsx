@@ -13,10 +13,10 @@ const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "center",
-  color: theme.palette.text.secondary
+  color: theme.palette.text.secondary,
 }));
 
-export default function Searchboard() {
+export default function Searchboard(props) {
   return (
     <Box sx={{ flexGrow: 1 }} display="flex" justifyContent="center">
       <Grid container spacing={1}>
@@ -25,7 +25,7 @@ export default function Searchboard() {
         </Grid>
         <Grid item xs={4} sm={12} md={16}>
           <Item elevation={0}>
-            <Searchbar />
+            <Searchbar setQuery={props.setQuery} />
           </Item>
         </Grid>
         <Grid item xs={4} sm={12} md={16} m={1}>

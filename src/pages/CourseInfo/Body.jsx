@@ -10,6 +10,14 @@ import PurchasedCourseFooter from "./components/PurchasedCourseFooter";
 import NotPurchasedCourseFooter from "./components/NotPurchasedCourseFooter";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { GetAPI } from "../../globalFunctions/APIHelper";
 
 const CourseData = {
   title: "高一 电机（中）",
@@ -25,47 +33,140 @@ const CourseData = {
   fee: "RM666",
 };
 
-export default function CourseBoard(props) {
-  const location = useLocation();
-  const { Purchased } = location.state;
-  console.log({ Purchased });
-
-  var Footer;
-  Footer = Purchased ? (
-    (Footer = (
-      <PurchasedCourseFooter time={CourseData.time} mark={CourseData.mark} />
-    ))
-  ) : (
-    <NotPurchasedCourseFooter fee={CourseData.fee} />
-  );
+const BootstrapDialogTitle = (props) => {
+  const { children, onClose, ...other } = props;
 
   return (
-    <Grid container columns={{ xs: 10 }}>
-      <Grid
-        item
-        xs={5}
-        sx={{
-          marginTop: "5%",
-          marginRight: "2.5%",
-          marginLeft: "2.5%",
-        }}
-      >
-        <CouseInfoBoard
-          title={CourseData.title}
-          dayOfWeek={CourseData.dayOfWeek}
-          time={CourseData.time}
-          image={CourseData.image}
-          teacher={CourseData.teacher}
-          description={CourseData.description}
-          courseDesc={CourseData.courseDesc}
-        />
-      </Grid>
-      <Grid item xs={4} sx={{ marginTop: "5%", marginRight: "2.5%" }}>
-        <CourseOutlineBoard courseOutline={CourseData.courseOutline} />
-      </Grid>
-      <Grid item xs={10} sx={{ marginTop: "-2.5%", marginLeft: "2.5%" }}>
-        {Footer}
-      </Grid>
-    </Grid>
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+};
+
+export default function CourseBoard(props) {
+  const location = useLocation();
+  // const { Purchased } = props; // location.state;
+  const [courselinks, setCourseLinks] = React.useState([]);
+
+  let URL_GetCourseLink = "https://api.l3education.com.my/onlineClassroom/get/";
+  React.useEffect(() => {
+    GetAPI(URL_GetCourseLink + props.courseInfo.id).then((res) => {
+      setCourseLinks(res.data);
+    });
+  }, []);
+  var Footer;
+
+  Footer = props.Purchased ? (
+    (Footer = (
+      <PurchasedCourseFooter
+        time={props.time}
+        mark={CourseData.mark}
+        courseInfo={props.courseInfo}
+        zoomURL={courselinks.zoomUrl}
+        googleClassroom={courselinks.googleClassroom}
+      />
+    ))
+  ) : (
+    <NotPurchasedCourseFooter
+      fee={props.courseInfo.courseCost}
+      id={props.courseInfo.id}
+      setOpenDialog={props.setOpenDialog}
+      setShowAlert={props.setShowAlert}
+    />
+  );
+
+  const handleClose = () => {
+    props.setOpenDialog(false);
+  };
+
+  const BootstrapDialogTitle = (props) => {
+    const { children, onClose, ...other } = props;
+
+    return (
+      <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+        {children}
+        {onClose ? (
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+      </DialogTitle>
+    );
+  };
+
+  return (
+    <Dialog
+      open={props.openDialog}
+      onClose={handleClose}
+      fullScreen
+      PaperProps={{ sx: { width: "90%", border: 1, height: "80%" } }}
+    >
+      <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+        课程
+      </BootstrapDialogTitle>
+      <DialogContent>
+        {" "}
+        <Grid container columns={{ xs: 10 }}>
+          <Grid
+            item
+            xs={5}
+            sx={{
+              marginTop: "5%",
+              marginRight: "2.5%",
+              marginLeft: "2.5%",
+            }}
+          >
+            <CouseInfoBoard
+              title={props.courseInfo.courseName}
+              dayOfWeek={props.courseInfo.dayOfWeek}
+              time={
+                props.courseInfo.startTime.slice(0, 5) +
+                " - " +
+                props.courseInfo.endTime.slice(0, 5)
+              }
+              image={null}
+              teacher={props.courseInfo.teacherName}
+              description={props.courseInfo.teacherDescription}
+              courseDesc={props.courseInfo.courseDescription}
+            />
+          </Grid>
+          <Grid item xs={4} sx={{ marginTop: "5%", marginRight: "2.5%" }}>
+            <CourseOutlineBoard courseOutline={"此功能未开放"} />
+          </Grid>
+          <Grid item xs={10} sx={{ marginTop: "-2.5%", marginLeft: "2.5%" }}>
+            {Footer}
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        {/* <Button onClick={handleClose}>取消</Button>
+        <Button onClick={handleClose}>
+          <Typography sx={{ color: "red" }}>确认</Typography>
+        </Button> */}
+      </DialogActions>
+    </Dialog>
   );
 }

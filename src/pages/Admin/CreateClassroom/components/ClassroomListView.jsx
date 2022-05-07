@@ -25,7 +25,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { PostAPI } from "../../../../globalFunctions/APIHelper";
+import { PostAPI, PutAPI } from "../../../../globalFunctions/APIHelper";
 import axios from "axios";
 import ManageClassroom from "../../EditClassroom/components/ManageClassroom";
 import DeleteDialog from "./DeleteDialog";
@@ -42,7 +42,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function ClassroomBrowse(props) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   let URL_PostCourse = "https://api.l3education.com.my/course/create";
   let URL_PutCourse = "https://api.l3education.com.my/course/update/";
   const { list, setList } = props;
@@ -57,7 +57,7 @@ export default function ClassroomBrowse(props) {
   React.useEffect(() => {
     if (confirm) {
       let courseID = deleteSelected.id;
-      var updateDate = {
+      var updateData = {
         courseActive: "N",
         courseCost: deleteSelected.courseCost,
         courseName: deleteSelected.courseName,
@@ -68,26 +68,16 @@ export default function ClassroomBrowse(props) {
         teacherId: deleteSelected.teacherId,
       };
 
-      axios
-        .put(URL_PutCourse + courseID, updateDate, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          const deleted = list.map((filter) => {
-            if (filter.id === courseID) {
-              filter.courseActive = "N";
-            }
-            return filter;
-          });
-          console.log(deleted);
-          setList(deleted.filter((filter) => filter.courseActive !== "N"));
-        })
-        .catch((error) => {
-          console.log("exception");
-          console.log(error);
+      PutAPI(URL_PutCourse + courseID, updateData, false).then((response) => {
+        const deleted = list.map((filter) => {
+          if (filter.id === courseID) {
+            filter.courseActive = "N";
+          }
+          return filter;
         });
+        // console.log(deleted);
+        setList(deleted.filter((filter) => filter.courseActive !== "N"));
+      });
       setConfirm(false);
     }
   }, [confirm]);
@@ -115,22 +105,11 @@ export default function ClassroomBrowse(props) {
   const handleSubmit = () => {
     // console.log(selectedData);
 
-    axios
-      .post(URL_PostCourse, selectedData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setList([...list, selectedData]);
-        }
-        // console.log(response.status);
-      })
-      .catch((error) => {
-        console.log("exception");
-        console.log(error);
-      });
+    PostAPI(URL_PostCourse, selectedData, true).then((response) => {
+      if (response.status === 200) {
+        setList([...list, selectedData]);
+      }
+    });
 
     setOpen(false);
   };

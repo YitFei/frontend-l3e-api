@@ -11,6 +11,7 @@ import { styled } from "@mui/material/styles";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import CardActionArea from "@mui/material/CardActionArea";
 import { Link } from "react-router-dom";
+import CourseInfo from "../../CourseInfo/Body";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -21,32 +22,54 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Classcard(props) {
+  const [openDialog, setOpenDialog] = React.useState(false);
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <Link to={props.redirectTo} state={{ Purchased: true }}>
-        <CardMedia
-          component="img"
-          height="140"
-          image={props.image}
-          alt="green iguana"
-        />
+    <div>
+      <CourseInfo
+        setOpenDialog={setOpenDialog}
+        openDialog={openDialog}
+        Purchased={true}
+        courseInfo={props.courseInfo}
+        time={props.time}
+      ></CourseInfo>
+      <Card sx={{ maxWidth: 345 }}>
+        {/* <Link to={props.redirectTo} state={{ Purchased: true }}> */}
+        <CardMedia component="img" height="140" image={props.image} />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="div"
+            textAlign={"center"}
+          >
             {props.title}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            time:{props.time}
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            textAlign={"center"}
+          >
+            时间: {props.time}
           </Typography>
         </CardContent>
         <CardActions>
           <Stack sx={{ m: "auto" }} direction="column" spacing={3}>
-            <Item elevation={0}>class showing now{props.time}</Item>
+            <Item elevation={0}>未上课</Item>
             <Item>
-              <Button size="small">go to classroom{props.link}</Button>
+              <Button
+                size="small"
+                onClick={() => {
+                  console.log("123");
+                  setOpenDialog(true);
+                }}
+              >
+                go to classroom{props.link}
+              </Button>
             </Item>
           </Stack>
         </CardActions>
-      </Link>
-    </Card>
+        {/* </Link> */}
+      </Card>
+    </div>
   );
 }

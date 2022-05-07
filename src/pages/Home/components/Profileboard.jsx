@@ -15,49 +15,49 @@ const useStyles = makeStyles(({ palette }) => ({
     color: palette.grey[500],
     backgroundColor: "#add8e6",
     fontWeight: 500,
-    margin: 0
+    margin: 0,
   },
   card: {
     borderRadius: 12,
     minWidth: 256,
-    textAlign: "center"
+    textAlign: "center",
   },
   avatar: {
     width: 60,
     height: 60,
-    margin: "auto"
+    margin: "auto",
   },
   heading: {
     fontSize: 18,
     fontWeight: "bold",
     letterSpacing: "0.5px",
     marginTop: 8,
-    marginBottom: 0
+    marginBottom: 0,
   },
   subheader: {
     fontSize: 14,
     color: palette.grey[500],
-    marginBottom: "0.875em"
+    marginBottom: "0.875em",
   },
   statLabel: {
     fontSize: 12,
     color: palette.grey[500],
     fontWeight: 500,
-    margin: 0
+    margin: 0,
   },
   statValue: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 4,
-    letterSpacing: "1px"
-  }
+    letterSpacing: "1px",
+  },
 }));
 
 export const Profileboard = React.memo(function ProfileCard(props) {
   const styles = useStyles();
   const borderedGridStyles = useGutterBorderedGridStyles({
     borderColor: "rgba(0, 0, 0, 0.08)",
-    height: "50%"
+    height: "50%",
   });
   return (
     <Card className={cx(styles.card)}>
@@ -66,7 +66,7 @@ export const Profileboard = React.memo(function ProfileCard(props) {
         <h3 className={styles.heading}>{props.name}</h3>
         <span className={styles.subheader}>{props.desciption}</span>
         <br />
-        <Button className={styles.buttonStyles}>Edit</Button>
+        {/* <Button className={styles.buttonStyles}>Edit</Button> */}
       </CardContent>
       <Divider light />
       <Box display={"flex"}>
@@ -76,7 +76,7 @@ export const Profileboard = React.memo(function ProfileCard(props) {
         </Box>
         <Box p={2} flex={"auto"} className={borderedGridStyles.item}>
           <p className={styles.statLabel}>Like</p>
-          <p className={styles.statValue}>12</p>
+          <p className={styles.statValue}></p>
         </Box>
       </Box>
     </Card>

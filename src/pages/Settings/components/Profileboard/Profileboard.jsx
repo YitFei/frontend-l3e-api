@@ -11,7 +11,7 @@ const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "center",
-  color: theme.palette.text.secondary
+  color: theme.palette.text.secondary,
 }));
 
 export default function Profileboard(props) {
@@ -28,7 +28,10 @@ export default function Profileboard(props) {
         </Grid>
         <Grid item xs={17} sm={4} md={6}>
           <Item elevation={0}>
-            <BasicInfo name={props.name} bio={props.bio} />
+            <BasicInfo
+              userDetail={props.userDetail}
+              setUserDetail={props.setUserDetail}
+            />
           </Item>
           <Grid item xs={"auto"} sm={1} md={1}>
             {/* blank spacing */}

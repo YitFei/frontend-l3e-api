@@ -4,7 +4,22 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 
+import { GetAPI } from "../../../globalFunctions/APIHelper";
+
 export default function Notificationboard() {
+  const [anouncementList, setAnouncementList] = React.useState([]);
+
+  let URL_GetAnouncementList =
+    "https://api.l3education.com.my/announcement/getAll";
+  React.useEffect(() => {
+    GetAPI(URL_GetAnouncementList).then((data) => {
+      const activeAnouncementList = data.data.filter(
+        (anouncement) => anouncement.isOver === "N"
+      );
+      setAnouncementList(activeAnouncementList);
+    });
+  }, []);
+
   return (
     <List
       sx={{
@@ -15,21 +30,17 @@ export default function Notificationboard() {
         overflow: "auto",
         maxHeight: 300,
         "& ul": { padding: 0 },
-        borderRadius: 12
+        borderRadius: 12,
       }}
       subheader={<li />}
     >
-      {["1月31號", "5月31號", "7月21號", "9月9號"].map((sectionId) => (
-        <li key={`section-${sectionId}`}>
-          <ul>
-            <ListSubheader>{`${sectionId}`}</ListSubheader>
-            {["全體停課", "消息二", "消息三"].map((item) => (
-              <ListItem key={`${sectionId}-${item}`}>
-                <ListItemText primary={`Item ${item}`} />
-              </ListItem>
-            ))}
-          </ul>
-        </li>
+      {anouncementList.map((anouncement) => (
+        <div>
+          <ListSubheader>{`${anouncement.title}`}</ListSubheader>
+          <ListItem key={anouncement.title + anouncement.description}>
+            <ListItemText>{anouncement.description}</ListItemText>
+          </ListItem>
+        </div>
       ))}
     </List>
   );

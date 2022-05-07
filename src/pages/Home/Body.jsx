@@ -13,20 +13,20 @@ const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   textAlign: "center",
   borderRadius: 12,
-  color: theme.palette.text.secondary
+  color: theme.palette.text.secondary,
 }));
 
-export default function Body() {
+export default function Body({ userDetail }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={4}>
           <Item>
             <Profileboard
-              name="趙曉文"
-              desciption="夢裡出現的人，醒來就應該去見他，生活就是怎麼簡單。"
-              image={Image}
-              email={"test@gmail.com"}
+              name={userDetail.name}
+              desciption="此功能未开启"
+              image={null}
+              email={userDetail.email}
             />
           </Item>
         </Grid>

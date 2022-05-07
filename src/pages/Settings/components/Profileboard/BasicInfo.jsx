@@ -10,18 +10,16 @@ const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "center",
-  color: theme.palette.text.secondary
+  color: theme.palette.text.secondary,
 }));
 
 export default function BasicInfo(props) {
-  const [namevalue, setNameValue] = React.useState(props.name);
-  const [biovalue, setBioValue] = React.useState(props.bio);
-
-  const handleChangeName = (event) => {
-    setNameValue(event.target.value);
-  };
-  const handleChangeBio = (event) => {
-    setBioValue(event.target.value);
+  const { userDetail } = props;
+  const handleChange = (event, fieldName) => {
+    props.setUserDetail((preData) => ({
+      ...preData,
+      [fieldName]: event.target.value,
+    }));
   };
 
   return (
@@ -29,7 +27,7 @@ export default function BasicInfo(props) {
       <Stack
         component="form"
         sx={{
-          "& .MuiTextField-root": { m: 1, width: "25ch" }
+          "& .MuiTextField-root": { m: 1, width: "25ch" },
         }}
         noValidate
         autoComplete="off"
@@ -40,8 +38,8 @@ export default function BasicInfo(props) {
             label="Name"
             multiline
             maxRows={4}
-            value={namevalue}
-            onChange={handleChangeName}
+            value={userDetail["name"]}
+            onChange={(e) => handleChange(e, "name")}
           />
         </Item>
         <Item elevation={0}>
@@ -50,12 +48,11 @@ export default function BasicInfo(props) {
             label="Bio"
             multiline
             maxRows={4}
-            value={biovalue}
-            onChange={handleChangeBio}
+            // value={userDetail["description"]}
+            value={"此功能目前未开放"}
+            disabled
+            onChange={(e) => handleChange(e, "name")}
           />
-        </Item>
-        <Item elevation={0}>
-          <Button variant="outlined">Update</Button>
         </Item>
       </Stack>
     </div>

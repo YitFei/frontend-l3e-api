@@ -32,12 +32,7 @@ export default function CourseInfoBoard(props) {
       </Grid>
 
       <Grid item xs={4} sx={{ border: 1, height: 200 }}>
-        <CardMedia
-          component="img"
-          height="140"
-          image={props.image}
-          alt="green iguana"
-        />
+        <CardMedia component="img" height="100%" image={props.image} />
       </Grid>
       <Grid item xs={4} sx={{ border: 1 }}>
         <Grid xs={12} sx={{ borderBottom: 1, height: "30%" }}>
@@ -56,12 +51,11 @@ export default function CourseInfoBoard(props) {
 
       <Grid item xs={4} sx={{ border: 1 }}>
         <Grid xs={12} sx={{ borderBottom: 1, height: "30%" }}>
-          <Typography textAlign={"center"}>課程詳情{props.teacher}</Typography>
+          <Typography textAlign={"center"}>課程詳情</Typography>
         </Grid>
-        <Grid xs={12}>
-          <Typography variant="body2" color="text.primary" textAlign={"center"}>
-            {props.courseDesc}
-          </Typography>
+        <Grid xs={12} sx={{ border: 0 }} height={100}>
+          {" "}
+          <Typography variant={"body2"}>{props.courseDesc}</Typography>
         </Grid>
       </Grid>
     </Grid>

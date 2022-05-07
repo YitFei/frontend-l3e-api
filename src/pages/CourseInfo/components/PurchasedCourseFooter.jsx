@@ -12,7 +12,11 @@ export default function PurchasedCourseFooter(props) {
   return (
     <Grid container columns={{ xs: 12 }}>
       <Grid item xs={4} sx={{ border: 1 }}>
-        <Button fullWidth>開始上課{props.time}</Button>
+        <Button fullWidth>
+          <a href={props.zoomURL} target="_blank">
+            開始上課 {props.time}{" "}
+          </a>
+        </Button>
       </Grid>
 
       <Grid item xs={1} sx={{ borderTop: 1, borderLeft: 1, borderBottom: 1 }}>
@@ -31,7 +35,12 @@ export default function PurchasedCourseFooter(props) {
       <Grid item xs={1} />
 
       <Grid item xs={6} sx={{ border: 1, marginTop: "2.5%" }}>
-        <Button fullWidth>作業筆記專區</Button>
+        <Button fullWidth>
+          {" "}
+          <a href={props.googleClassroom} target="_blank">
+            作业笔记专区
+          </a>
+        </Button>
       </Grid>
 
       <Grid item xs={12} sx={{ border: 0, marginTop: "2.5%" }}>
@@ -43,13 +52,16 @@ export default function PurchasedCourseFooter(props) {
             maxRows={6}
             aria-label="maximum height"
             placeholder="Anonymous Message"
-            defaultValue=""
+            defaultValue="此功能未开放"
+            disabled
             style={{ width: "100%", height: "200px" }}
           />
         </Grid>
 
         <Grid item xs={12} sx={{ border: 1, marginBottom: "2.5%" }}>
-          <Button fullWidth>提交（此留言只有管理員可見）</Button>
+          <Button disabled fullWidth>
+            提交（此留言只有管理員可見）
+          </Button>
         </Grid>
       </Grid>
     </Grid>

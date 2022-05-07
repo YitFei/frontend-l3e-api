@@ -5,6 +5,8 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Classcard from "./components/Classcard";
 import { useNavigate } from "react-router-dom";
+import CourseInfo from "../CourseInfo/Body";
+import { GetAPI } from "../../globalFunctions/APIHelper";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -71,6 +73,22 @@ const mycourses = [
 const redirectToLink = "../CourseInfo";
 
 export default function Body() {
+  let URL_GetAllSubcriptionCourse =
+    "https://api.l3education.com.my/courseSubscription/list";
+
+  let URL_GetAllCourseInfo = "https://api.l3education.com.my/course/list";
+
+  const [courseList, setCourseList] = React.useState([]);
+  const [courseInfoList, setCourseInfoList] = React.useState([]);
+
+  React.useEffect(() => {
+    GetAPI(URL_GetAllSubcriptionCourse, false).then((res) => {
+      setCourseList(res.data);
+    });
+    GetAPI(URL_GetAllCourseInfo, false).then((res) => {
+      setCourseInfoList(res.data);
+    });
+  }, []);
   return (
     <Box sx={{ flexGrow: 1, marginLeft: 1 }}>
       <Grid
@@ -78,17 +96,26 @@ export default function Body() {
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 12, md: 16 }}
       >
-        {mycourses.map((item, index) => (
-          <Grid item xs={2} sm={4} md={4} key={index}>
-            <Classcard
-              title={item.title}
-              link={item.link}
-              redirectTo={redirectToLink}
-              time={item.time}
-              image="https://i.pravatar.cc/300"
-            />
-          </Grid>
-        ))}
+        {courseList.map((course, index) =>
+          courseInfoList
+            .filter((filter) => {
+              return filter.id === course.courseId;
+            })
+            .map((courseInfo) => (
+              <Grid item xs={2} sm={4} md={4} key={index}>
+                <Classcard
+                  title={course.courseName}
+                  time={
+                    courseInfo.startTime.slice(0, 5) +
+                    " - " +
+                    courseInfo.endTime.slice(0, 5)
+                  }
+                  courseInfo={courseInfo}
+                  image={null}
+                />
+              </Grid>
+            ))
+        )}
       </Grid>
     </Box>
   );

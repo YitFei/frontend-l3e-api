@@ -10,6 +10,7 @@ import axios from "axios";
 import { ConsoleLogger } from "@aws-amplify/core";
 import { set } from "draft-js/lib/EditorState";
 import { GetAPI } from "../../../globalFunctions/APIHelper";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -29,7 +30,7 @@ function createData(id, classroom) {
 
 export default function Body(props) {
   const [data, setData] = useState([]);
-
+  const { user, signOut } = useAuthenticator((context) => [context.user]);
   let url_getCourseList = "https://api.l3education.com.my/course/admin/list";
 
   useEffect(() => {
@@ -38,8 +39,24 @@ export default function Body(props) {
     });
   }, []);
 
+  const getData = async () => {
+    const token = sessionStorage.getItem("token");
+
+    await axios({
+      method: "get",
+      url: url_getCourseList,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(function (res) {
+      console.log(res.data);
+      setData(res.data.data);
+    });
+  };
+
   return (
     <Box sx={{ flexGrow: 1, marginLeft: 1 }}>
+      {/* {console.log(user)} */}
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
