@@ -23,6 +23,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Classcard(props) {
   const [openDialog, setOpenDialog] = React.useState(false);
+  const userGroup = sessionStorage.getItem("userGroup");
   return (
     <div>
       <CourseInfo
@@ -63,7 +64,7 @@ export default function Classcard(props) {
                   setOpenDialog(true);
                 }}
               >
-                go to classroom{props.link}
+                {userGroup === "student" ? "go to classroom" : "设置教室"}
               </Button>
             </Item>
           </Stack>

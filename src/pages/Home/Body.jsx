@@ -37,7 +37,7 @@ export default function Body({ userDetail }) {
         </Grid>
         <Grid item xs={12}>
           <Item>
-            <Timetable />
+            <Timetable userDetail={userDetail} />
           </Item>
         </Grid>
       </Grid>

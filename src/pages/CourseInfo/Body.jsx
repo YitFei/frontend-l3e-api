@@ -61,6 +61,7 @@ export default function CourseBoard(props) {
   const location = useLocation();
   // const { Purchased } = props; // location.state;
   const [courselinks, setCourseLinks] = React.useState([]);
+  const userGroup = sessionStorage.getItem("userGroup");
 
   let URL_GetCourseLink = "https://api.l3education.com.my/onlineClassroom/get/";
   React.useEffect(() => {
@@ -70,24 +71,26 @@ export default function CourseBoard(props) {
   }, []);
   var Footer;
 
-  Footer = props.Purchased ? (
-    (Footer = (
-      <PurchasedCourseFooter
-        time={props.time}
-        mark={CourseData.mark}
-        courseInfo={props.courseInfo}
-        zoomURL={courselinks.zoomUrl}
-        googleClassroom={courselinks.googleClassroom}
+  if (userGroup === "student") {
+    Footer = props.Purchased ? (
+      (Footer = (
+        <PurchasedCourseFooter
+          time={props.time}
+          mark={CourseData.mark}
+          courseInfo={props.courseInfo}
+          zoomURL={courselinks.zoomUrl}
+          googleClassroom={courselinks.googleClassroom}
+        />
+      ))
+    ) : (
+      <NotPurchasedCourseFooter
+        fee={props.courseInfo.courseCost}
+        id={props.courseInfo.id}
+        setOpenDialog={props.setOpenDialog}
+        setShowAlert={props.setShowAlert}
       />
-    ))
-  ) : (
-    <NotPurchasedCourseFooter
-      fee={props.courseInfo.courseCost}
-      id={props.courseInfo.id}
-      setOpenDialog={props.setOpenDialog}
-      setShowAlert={props.setShowAlert}
-    />
-  );
+    );
+  }
 
   const handleClose = () => {
     props.setOpenDialog(false);
@@ -140,6 +143,7 @@ export default function CourseBoard(props) {
             }}
           >
             <CouseInfoBoard
+              userGroup={userGroup}
               title={props.courseInfo.courseName}
               dayOfWeek={props.courseInfo.dayOfWeek}
               time={
@@ -162,10 +166,14 @@ export default function CourseBoard(props) {
         </Grid>
       </DialogContent>
       <DialogActions>
-        {/* <Button onClick={handleClose}>取消</Button>
-        <Button onClick={handleClose}>
-          <Typography sx={{ color: "red" }}>确认</Typography>
-        </Button> */}
+        {userGroup === "teacher" && (
+          <div>
+            <Button onClick={handleClose}>取消</Button>
+            <Button onClick={handleClose}>
+              <Typography sx={{ color: "red" }}>确认</Typography>
+            </Button>
+          </div>
+        )}
       </DialogActions>
     </Dialog>
   );

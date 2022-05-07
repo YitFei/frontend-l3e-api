@@ -43,7 +43,7 @@ const rows = [
   createData("班會", "", "", "高二 化学（中）", "", "初二 数学 （概念课）", ""),
 ];
 
-export default function Timetable() {
+export default function Timetable(props) {
   let URL_GetAllSubcriptionCourse =
     "https://api.l3education.com.my/courseSubscription/list";
 
@@ -52,6 +52,7 @@ export default function Timetable() {
   const [courseList, setCourseList] = React.useState([]);
   const [courseInfoList, setCourseInfoList] = React.useState([]);
 
+  const userGroup = sessionStorage.getItem("userGroup");
   React.useEffect(() => {
     GetAPI(URL_GetAllSubcriptionCourse).then((res) => {
       setCourseList(res.data);
@@ -64,11 +65,12 @@ export default function Timetable() {
   return (
     <div>
       {console.log("---------------------------------------")}
+      {console.log(props.userDetail.name)}
       {console.log(
         courseInfoList
           .filter((itemA) => {
-            return !courseInfoList.find((itemB) => {
-              return itemA.courseId === itemB.id;
+            return courseList.find((itemB) => {
+              return itemA.id === itemB.courseId;
             });
           })
           .sort((a, b) => {
@@ -101,9 +103,11 @@ export default function Timetable() {
           <TableBody>
             {courseInfoList
               .filter((itemA) => {
-                return !courseInfoList.find((itemB) => {
-                  return itemA.courseId === itemB.id;
-                });
+                return userGroup === "student"
+                  ? courseList.find((itemB) => {
+                      return itemA.id === itemB.courseId;
+                    })
+                  : itemA.teacherName === props.userDetail.name;
               })
               .sort((a, b) => {
                 let startTime =

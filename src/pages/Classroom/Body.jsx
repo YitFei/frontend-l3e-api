@@ -72,7 +72,7 @@ const mycourses = [
 
 const redirectToLink = "../CourseInfo";
 
-export default function Body() {
+export default function Body(props) {
   let URL_GetAllSubcriptionCourse =
     "https://api.l3education.com.my/courseSubscription/list";
 
@@ -80,12 +80,13 @@ export default function Body() {
 
   const [courseList, setCourseList] = React.useState([]);
   const [courseInfoList, setCourseInfoList] = React.useState([]);
+  const userGroup = sessionStorage.getItem("userGroup");
 
   React.useEffect(() => {
     GetAPI(URL_GetAllSubcriptionCourse, false).then((res) => {
       setCourseList(res.data);
     });
-    GetAPI(URL_GetAllCourseInfo, false).then((res) => {
+    GetAPI(URL_GetAllCourseInfo).then((res) => {
       setCourseInfoList(res.data);
     });
   }, []);
@@ -96,26 +97,43 @@ export default function Body() {
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 12, md: 16 }}
       >
-        {courseList.map((course, index) =>
-          courseInfoList
-            .filter((filter) => {
-              return filter.id === course.courseId;
-            })
-            .map((courseInfo) => (
-              <Grid item xs={2} sm={4} md={4} key={index}>
-                <Classcard
-                  title={course.courseName}
-                  time={
-                    courseInfo.startTime.slice(0, 5) +
-                    " - " +
-                    courseInfo.endTime.slice(0, 5)
-                  }
-                  courseInfo={courseInfo}
-                  image={null}
-                />
-              </Grid>
-            ))
-        )}
+        {userGroup === "student"
+          ? courseList.map((course, index) =>
+              courseInfoList
+                .filter((filter) => {
+                  return filter.id === course.courseId;
+                })
+                .map((courseInfo) => (
+                  <Grid item xs={2} sm={4} md={4} key={index}>
+                    <Classcard
+                      title={course.courseName}
+                      time={
+                        courseInfo.startTime.slice(0, 5) +
+                        " - " +
+                        courseInfo.endTime.slice(0, 5)
+                      }
+                      courseInfo={courseInfo}
+                      image={null}
+                    />
+                  </Grid>
+                ))
+            )
+          : courseInfoList
+              .filter((name) => name.teacherName === props.userDetail.name)
+              .map((courseInfo, index) => (
+                <Grid item xs={2} sm={4} md={4} key={index}>
+                  <Classcard
+                    title={courseInfo.courseName}
+                    time={
+                      courseInfo.startTime.slice(0, 5) +
+                      " - " +
+                      courseInfo.endTime.slice(0, 5)
+                    }
+                    courseInfo={courseInfo}
+                    image={null}
+                  />
+                </Grid>
+              ))}
       </Grid>
     </Box>
   );
