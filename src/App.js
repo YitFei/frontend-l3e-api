@@ -147,7 +147,8 @@ export default function App(props) {
   {
   
     Auth.currentSession().then(res=>{
-   
+
+ 
       let accessToken = res.getAccessToken()
       let jwt = accessToken.getJwtToken()
       let this_userGroup = res.getAccessToken().payload['cognito:groups']
@@ -185,7 +186,7 @@ export default function App(props) {
     //super admin can post teacher only
     {
       Auth.currentAuthenticatedUser().then((AUser)=>{
-   
+
         var data = {
           "active": "Y",
           "age": 90,
@@ -223,6 +224,7 @@ export default function App(props) {
 
     })
   },[login])
+
   return (
     <>
       <CssBaseline />
@@ -237,7 +239,7 @@ export default function App(props) {
      
 
         <Route path="Home" element={<Home userDetail={userDetail} setUserDetail={setUserDetail}/>} />
-        <Route path="Classroom" element={<Classroom />} />
+        <Route path="Classroom" element={<Classroom userDetail={userDetail} />} />
         <Route path="Settings" element={<Settings userDetail={userDetail} setUserDetail={setUserDetail}/>} />
         <Route path="Subscriptions" element={<Subscriptions />} />
         {/* {console.log('token: ',login)} */}
